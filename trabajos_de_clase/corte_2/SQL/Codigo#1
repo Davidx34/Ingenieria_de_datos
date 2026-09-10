@@ -1,0 +1,74 @@
+/* Base de datos */
+CREATE DATABASE biblioteca;
+USE biblioteca;
+
+/* Tabla Autor */
+CREATE TABLE Autor(
+    identificacionAutor VARCHAR(50) PRIMARY KEY,
+    nombreAutor VARCHAR(20) NOT NULL,
+    fechaNacimiento DATE
+);
+
+/* Tabla libro */
+CREATE TABLE libro(
+    idLibro VARCHAR(20) PRIMARY KEY,
+    tituloLibro VARCHAR(50) NOT NULL,
+    identificacionAutorFK VARCHAR(50),
+    anioPublicacion YEAR NOT NULL,
+    estadoLibro BOOL
+);
+
+ALTER TABLE libro
+ADD CONSTRAINT autorlibro
+FOREIGN KEY (identificacionAutorFK)
+REFERENCES Autor (identificacionAutor);
+
+/* Tabla miembro */
+CREATE TABLE miembro(
+    identificacionMiembro INT AUTO_INCREMENT PRIMARY KEY,
+    documentoMiembro INT NOT NULL,
+    nombreMiembro VARCHAR(20) NOT NULL,
+    direccionMiembro VARCHAR(50) NULL,
+    fechaInscripcion DATE NOT NULL,
+    estadoMiembro BOOL
+);
+
+/* Tabla prestamo */
+CREATE TABLE prestamo(
+    idPrestamo INT AUTO_INCREMENT PRIMARY KEY,
+    fechaPrestamo DATE NOT NULL,
+    fechaDevolucion DATE NOT NULL,
+    estadoPrestamo BOOL,
+    identificacionMiembroFK INT,
+    idLibroFK VARCHAR(20),
+    CONSTRAINT fkprestamomiembro
+        FOREIGN KEY (identificacionMiembroFK) 
+        REFERENCES miembro(identificacionMiembro)
+        ON DELETE CASCADE,
+    CONSTRAINT fkprestamolibro
+        FOREIGN KEY (idLibroFK)
+        REFERENCES libro(idLibro)
+        ON DELETE CASCADE
+);
+
+/* Describir la estructura de la tabla prestamo */
+DESCRIBE prestamo;
+
+/* =============================================
+   MODIFICACIONES DDL SOLICITADAS
+   ============================================= */
+
+/* 1. Agregar el campo descripcion a la tabla prestamo */
+ALTER TABLE prestamo 
+ADD COLUMN descripcion VARCHAR(100);
+
+/* 2. Cambiar anioPublicacion a VARCHAR en la tabla libro */
+ALTER TABLE libro 
+MODIFY COLUMN anioPublicacion VARCHAR(10) NOT NULL;
+
+/* 3. Eliminar el campo documentoMiembro de la tabla miembro */
+ALTER TABLE miembro 
+DROP COLUMN documentoMiembro;
+
+/* 4. Cambiar el nombre de la tabla miembro por Socio */
+RENAME TABLE miembro TO Socio;
