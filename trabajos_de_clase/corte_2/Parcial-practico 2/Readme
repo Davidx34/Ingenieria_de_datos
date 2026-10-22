@@ -1,0 +1,15 @@
+parcial práctico 2 - cicloverde
+
+- nombre: (José David Catral)
+- **motor:** mysql 8.0 (el script lo indica en la primera línea)
+
+
+
+El script empieza con `drop database if exists cicloverde;`, crea la base, las 7 tablas, carga los datos iniciales y resuelve R3 a R13 en orden, con la plantilla de encabezados pedida.
+
+## decisiones
+- La clave primaria de `viaje_accesorio` es (`id_viaje`, `id_accesorio`): evita repetir un accesorio en el mismo viaje (RN-04).
+- R4.b: solo la bicicleta CV-E03 (1620 km, ACTIVA) pasa a TALLER; CV-M03 está en BAJA y no cambia.
+- R4.c: se borran los viajes 6 y 12; el 9 se conserva porque tiene 0.8 km.
+- R13: las llamadas 2 y 3 fallan a propósito (bicicleta CV-E03 en TALLER, y usuario 2 con un viaje EN_CURSO).
+
