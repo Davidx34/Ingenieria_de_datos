@@ -1,0 +1,19 @@
+//1.ventas de pedidos entregados por método pago
+//2.¿cuantos pedidos se cancelaron?
+//3.Menu disponible de cada restaurante como lista, con su precio máximo(primero 3 por _id)
+//4.Productos por tipo con precio promedio
+//5.Los 3 clientes con mayor gasto en pedidos entregados
+//6.Restaurantes con ventas entregadas superiores a 70000(equivalente a HAVING)
+//7.Pedidos pendientes o en camino con el email del cliente para notificarlo
+
+use saborya
+
+//1
+db.pedidos.aggregate([{$match:{ estado:"entregado" } },{ $group:{_id:"$metodo_pago",total_ventas:{$sum:"$total" },cantidad_pedidos: { $sum: 1 }} },{$sort: { total_ventas:-1 }}])
+
+//2
+db.pedidos.countDocuments({ estado: "cancelado" })
+
+//3
+db.productos.aggregate([{$match: { disponible: true } },
+  {$group: {_id: "$restaurante_id", menu_disponible: { $push: "$nombre" }, precio_maximo: { $max: "$precio" } } },{ $sort: { _id: 1 } },{ $limit: 3}])
